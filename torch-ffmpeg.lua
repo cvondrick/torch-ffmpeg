@@ -1,8 +1,11 @@
 do
   local FFmpeg = torch.class('FFmpeg')
 
-  function FFmpeg:__init(video_path)
+  function FFmpeg:__init(video_path, opts)
     self.video_path = video_path
+    if opts == nil then
+      opts = ''
+    end
 
     -- use ffprobe to find width/height of video
     -- this will store self.width, self.height, self.duration
@@ -17,7 +20,7 @@ do
 
     -- open ffmpeg pipe
     -- this subprocess will send raw RGB values to us, corresponding to frames
-    local cmd = 'ffmpeg -i ' .. video_path .. ' -f image2pipe -pix_fmt rgb24 -loglevel fatal -vcodec rawvideo -'
+    local cmd = 'ffmpeg -i ' .. video_path .. ' ' .. opts .. ' -f image2pipe -pix_fmt rgb24 -loglevel fatal -vcodec rawvideo -'
     self.fd = assert(torch.PipeFile(cmd))
     self.fd:binary()
     self.fd:quiet()

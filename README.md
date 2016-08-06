@@ -17,6 +17,11 @@ The `demo.lua` code shows how to use it. It's pretty easy:
   
 `frames` will be a T x 3 x W x H tensor, where T is number of frames read, and W and H is width and height. In the example above, T = 10.
 
-## Hacking
+## Options
 
-If you want to, for example, change the frame rate or seek to different parts of the video, you can modify the `ffmpeg` command in `torch-ffmpeg.lua` as you see fit. It will accept any command line option your ffmpeg program accepts.
+If you want to specify different options, such as a different starting point or change the frame rate, you can pass additional options to FFmpeg like so:
+
+    vid = FFmpeg('video.mp4', '-r 10') -- 10 fps
+    vid = FFmpeg('video.mp4', '-ss 00:00:07') -- seek to 7sec mark
+
+Note that seeking is approximate, but fast.
