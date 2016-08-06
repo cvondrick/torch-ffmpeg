@@ -3,9 +3,7 @@ do
 
   function FFmpeg:__init(video_path, opts)
     self.video_path = video_path
-    if opts == nil then
-      opts = ''
-    end
+    self.opts = opts or ''
 
     -- use ffprobe to find width/height of video
     -- this will store self.width, self.height, self.duration
@@ -18,15 +16,20 @@ do
     end
     fd:close()
 
-    -- open ffmpeg pipe
-    -- this subprocess will send raw RGB values to us, corresponding to frames
-    local cmd = 'ffmpeg -i ' .. video_path .. ' ' .. opts .. ' -f image2pipe -pix_fmt rgb24 -loglevel fatal -vcodec rawvideo -'
-    self.fd = assert(torch.PipeFile(cmd))
-    self.fd:binary()
-    self.fd:quiet()
+    self.fd = nil
   end
 
   function FFmpeg:read(nframes)
+    if self.fd == nil then
+      -- open ffmpeg pipe
+      -- this subprocess will send raw RGB values to us, corresponding to frames
+      local cmd = 'ffmpeg -i ' .. self.video_path .. ' ' .. self.opts .. ' -f image2pipe -pix_fmt rgb24 -loglevel fatal -vcodec rawvideo -'
+      self.fd = assert(torch.PipeFile(cmd))
+      self.fd:binary()
+      self.fd:quiet()
+    end
+
+    -- read nframes from the pipe
     local t = torch.ByteTensor(nframes, self.height, self.width, 3)
     self.fd:readByte(t:storage())
 
@@ -39,6 +42,9 @@ do
   end
 
   function FFmpeg:close()
-    self.fd:close()
+    if self.fd ~= nil then
+      self.fd:close()
+      self.fd = nil
+    end
   end
 end
