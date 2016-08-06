@@ -3,7 +3,7 @@ This is a simple wrapper for FFmpeg in Torch7. There are a couple of other wrapp
 
 This wrapper:
 - talks to FFmpeg via Unix pipes so it is easy to install
-- it is a single Lua file, so easy to modify 
+- it is a single Lua file (and only 50 lines), so easy to modify 
 - it doesn't write to disk, so it is reasonably fast
 
 ## Usage
