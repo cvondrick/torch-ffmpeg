@@ -10,10 +10,10 @@ This wrapper:
 
 The `demo.lua` code shows how to use it. It's pretty easy:
 
-  require 'torch-ffmpeg'
-  vid = FFmpeg('video.mp4')
-  frames = vid:read(10)
-  vid:close()
+    require 'torch-ffmpeg'
+    vid = FFmpeg('video.mp4')
+    frames = vid:read(10)
+    vid:close()
   
 `frames` will be a T x 3 x W x H tensor, where T is number of frames read, and W and H is width and height. In the example above, T = 10.
 
