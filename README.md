@@ -3,7 +3,7 @@ This is a simple wrapper for FFmpeg in Torch7. There are a couple of other wrapp
 
 This wrapper:
 - talks to FFmpeg via Unix pipes so it is easy to install
-- it is a single Lua file (and only 50 lines), so easy to modify 
+- it is a single Lua file (and only 100 lines), so easy to modify 
 - it doesn't write to disk, so it is reasonably fast
 
 ## Usage
@@ -23,5 +23,7 @@ If you want to specify different options, such as a different starting point or 
 
     vid = FFmpeg('video.mp4', '-r 10') -- 10 fps
     vid = FFmpeg('video.mp4', '-ss 00:00:07') -- seek to 7sec mark
+    vid = FFmpeg('video.mp4', '-s 100x100') -- downsample resolution to 100x100
+    vid = FFmpeg('video.mp4', '-r 10 -s 100x100') -- frame rate and downsample
 
 Note that seeking is approximate, but fast.
