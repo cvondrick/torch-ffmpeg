@@ -1,8 +1,8 @@
 require 'torch-ffmpeg'
 
 -- Open up video
--- Remember to point to a video
-vid = FFmpeg('video.mp4')
+-- If you a recent enough FFmpeg, it can read from HTTP 
+vid = FFmpeg('http://www.flickr.com/videos/29833755@N08/4415516615/play/orig/4d40e1ea19')
 
 -- Reads 10 frames into a tensor
 frames = vid:read(10)
