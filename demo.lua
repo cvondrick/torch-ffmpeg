@@ -2,8 +2,7 @@ require 'torch-ffmpeg'
 
 -- Open up video
 -- Remember to point to a video
---vid = FFmpeg('video.mp4')
-vid = FFmpeg('/data/vision/torralba/crossmodal/flickr_videos//videos2/7/4/1/2/4/0/6/4/5574124064.mp4', '-s 100x100')
+vid = FFmpeg('video.mp4')
 
 -- Reads 10 frames into a tensor
 frames = vid:read(10)
