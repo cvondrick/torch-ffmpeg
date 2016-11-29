@@ -67,13 +67,13 @@ do
   function FFmpeg:stats() 
     -- use ffprobe to find width/height of video
     -- this will store self.width, self.height, self.duration
-    local cmd = 'ffprobe -select_streams v -v error -show_entries stream=width,height,duration -of default=noprint_wrappers=1 ' .. self.video_path
+    local cmd = 'ffprobe -select_streams v -v error -show_entries stream=width,height,duration,r_frame_rate -of default=noprint_wrappers=1 ' .. self.video_path
     local fd = assert(torch.PipeFile(cmd))
     fd:quiet()
 
     local retval = {}
 
-    for i=1,3 do
+    for i=1,4 do
       local line = fd:readString('*l')
       if fd:hasError() then
         self.valid = false
@@ -81,7 +81,12 @@ do
       end
       local split = {}
       for k in string.gmatch(line, '[^=]*') do table.insert(split, k) end
-      retval[split[1]] = tonumber(split[3])
+      if( split[1] == 'r_frame_rate' ) then
+         fps = split[3]:split('/')
+         retval[split[1]] = tonumber(fps[1]) / tonumber(fps[2])
+      else
+         retval[split[1]] = tonumber(split[3])
+      end
     end
 
     fd:close()
